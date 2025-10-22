@@ -1,0 +1,119 @@
+{
+    "server": {
+        "ip": "192.168.1.100",
+        "port": 8080,
+        "timeout": 30,
+        "retry_attempts": 3
+    },
+    "sandbox": {
+        "enabled": true,
+        "timeout": 45,
+        "temp_dir": "C:\\Temp\\Fixion",
+        "cleanup_after_analysis": true,
+        "max_file_size_mb": 100
+    },
+    "analysis": {
+        "quick_prescreen": true,
+        "escalate_on_medium_confidence": true,
+        "escalate_on_threat_detected": true,
+        "escalate_high_risk_files": true,
+        "local_timeout": 30,
+        "server_timeout": 300,
+        "skip_safe_locations": true
+    },
+    "file_types": {
+        "safe_extensions": [
+            ".txt",
+            ".pdf",
+            ".jpg",
+            ".png",
+            ".gif",
+            ".mp3",
+            ".mp4",
+            ".avi",
+            ".doc",
+            ".docx"
+        ],
+        "high_risk_extensions": [
+            ".exe",
+            ".dll",
+            ".scr",
+            ".bat",
+            ".cmd",
+            ".com",
+            ".pif",
+            ".msi"
+        ],
+        "safe_locations": [
+            "C:\\Windows\\System32",
+            "C:\\Windows\\SysWOW64",
+            "C:\\Program Files",
+            "C:\\Program Files (x86)"
+        ],
+        "suspicious_locations": [
+            "Downloads",
+            "Temp",
+            "AppData\\Local\\Temp"
+        ]
+    },
+    "logging": {
+        "level": "INFO",
+        "log_file": "fixion_client.log",
+        "max_log_size_mb": 10,
+        "backup_count": 5
+    },
+    "performance": {
+        "max_concurrent_scans": 2,
+        "cache_results": true,
+        "cache_duration_hours": 24
+    },
+    "machine": {
+        "id": "DESKTOP-EO764G5_273063048218666"
+    },
+    "user": {
+        "id": "default_user"
+    },
+    "environment": {
+        "type": "educational"
+    },
+    "auto_scanner": {
+        "startup_scan": true,
+        "scheduled_scans": true,
+        "quick_scan_hours": 6,
+        "full_scan_days": 7,
+        "max_duration_minutes": 30
+    },
+    "monitor": {
+        "paths": [
+            "C:\\Users\\ANE MAE CRESPO/Downloads",
+            "C:\\Users\\ANE MAE CRESPO/Desktop",
+            "C:\\Users\\ANE MAE CRESPO/Documents",
+            "C:\\Users\\ANEMAE~1\\AppData\\Local\\Temp"
+        ],
+        "excluded_extensions": [
+            ".tmp",
+            ".log",
+            ".txt",
+            ".pdf",
+            ".jpg",
+            ".png",
+            ".gif",
+            ".mp4",
+            ".avi"
+        ],
+        "analysis_delay_seconds": 5,
+        "max_file_size_mb": 100
+    },
+    "network": {
+        "block_mode": "educational",
+        "log_all_connections": false,
+        "notifications_enabled": true,
+        "monitoring_interval": 5
+    },
+    "quarantine": {
+        "directory": "C:\\Temp\\Fixion\\Quarantine"
+    },
+    "yara": {
+        "max_file_size_mb": 100
+    }
+}
