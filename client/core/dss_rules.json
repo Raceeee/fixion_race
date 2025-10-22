@@ -1,0 +1,249 @@
+[
+  {
+    "rule_id": "high_threat_executable",
+    "name": "High Threat Executable",
+    "description": "Executable file with high AI confidence score",
+    "conditions": {
+      "ai_score": {
+        "min": 0.8
+      },
+      "file_type": [
+        "executable"
+      ],
+      "reputation_score": {
+        "max": 0.3
+      }
+    },
+    "actions": [
+      {
+        "action_type": "quarantine",
+        "priority": 9,
+        "reason": "High AI confidence indicates malware",
+        "details": {
+          "backup_before_quarantine": true
+        },
+        "auto_execute": true
+      },
+      {
+        "action_type": "block_network",
+        "priority": 8,
+        "reason": "Prevent potential C&C communication",
+        "details": {
+          "block_duration": 3600
+        },
+        "auto_execute": true
+      }
+    ],
+    "enabled": true,
+    "priority": 9
+  },
+  {
+    "rule_id": "suspicious_downloads",
+    "name": "Suspicious Downloads",
+    "description": "Executable files in Downloads folder with medium threat",
+    "conditions": {
+      "ai_score": {
+        "min": 0.5,
+        "max": 0.8
+      },
+      "file_location": {
+        "contains": [
+          "downloads",
+          "temp"
+        ]
+      },
+      "file_type": [
+        "executable"
+      ]
+    },
+    "actions": [
+      {
+        "action_type": "sandbox",
+        "priority": 7,
+        "reason": "Analyze suspicious download in safe environment",
+        "details": {
+          "timeout": 60
+        },
+        "auto_execute": false
+      },
+      {
+        "action_type": "user_prompt",
+        "priority": 6,
+        "reason": "Ask user about file origin",
+        "details": {
+          "message": "Did you download this file intentionally?"
+        },
+        "auto_execute": false
+      }
+    ],
+    "enabled": true,
+    "priority": 7
+  },
+  {
+    "rule_id": "yara_malware_matches",
+    "name": "YARA Malware Matches",
+    "description": "Files matching YARA malware signatures",
+    "conditions": {
+      "yara_matches": {
+        "min_count": 1
+      },
+      "yara_categories": [
+        "malware",
+        "trojan",
+        "ransomware"
+      ]
+    },
+    "actions": [
+      {
+        "action_type": "quarantine",
+        "priority": 10,
+        "reason": "YARA signature match indicates known malware",
+        "details": {
+          "immediate": true
+        },
+        "auto_execute": true
+      },
+      {
+        "action_type": "escalate",
+        "priority": 9,
+        "reason": "Alert security team",
+        "details": {
+          "severity": "high"
+        },
+        "auto_execute": false
+      }
+    ],
+    "enabled": false,
+    "priority": 10
+  },
+  {
+    "rule_id": "trusted_signed_files",
+    "name": "Trusted Signed Files",
+    "description": "Files with valid signatures and good reputation",
+    "conditions": {
+      "is_signed": true,
+      "signature_valid": true,
+      "reputation_score": {
+        "min": 0.7
+      },
+      "ai_score": {
+        "max": 0.5
+      }
+    },
+    "actions": [
+      {
+        "action_type": "allow",
+        "priority": 2,
+        "reason": "Valid signature and good reputation",
+        "details": {
+          "whitelist": true
+        },
+        "auto_execute": true
+      }
+    ],
+    "enabled": true,
+    "priority": 2
+  },
+  {
+    "rule_id": "educational_policy",
+    "name": "Educational Environment Policy",
+    "description": "Special handling for educational environment",
+    "conditions": {
+      "environment": "educational",
+      "ai_score": {
+        "min": 0.3,
+        "max": 0.7
+      },
+      "file_type": [
+        "executable",
+        "script"
+      ]
+    },
+    "actions": [
+      {
+        "action_type": "user_prompt",
+        "priority": 7,
+        "reason": "Educational environment requires user confirmation",
+        "details": {
+          "message": "This file may be potentially harmful. Do you need it for your studies?",
+          "options": [
+            "Yes, I need it",
+            "No, remove it",
+            "Ask teacher"
+          ]
+        },
+        "auto_execute": false
+      },
+      {
+        "action_type": "monitor",
+        "priority": 5,
+        "reason": "Monitor student activity",
+        "details": {
+          "notify_teacher": true
+        },
+        "auto_execute": false
+      }
+    ],
+    "enabled": true,
+    "priority": 7
+  },
+  {
+    "rule_id": "low_confidence_risky_location",
+    "name": "Low Confidence Risky Location",
+    "description": "Low AI confidence but in high-risk location",
+    "conditions": {
+      "ai_score": {
+        "min": 0.2,
+        "max": 0.5
+      },
+      "file_location": {
+        "contains": [
+          "temp",
+          "appdata\\local\\temp"
+        ]
+      },
+      "file_age_hours": {
+        "max": 24
+      }
+    },
+    "actions": [
+      {
+        "action_type": "monitor",
+        "priority": 4,
+        "reason": "Monitor recently created files in temp locations",
+        "details": {
+          "duration": 3600
+        },
+        "auto_execute": false
+      }
+    ],
+    "enabled": true,
+    "priority": 4
+  },
+  {
+    "rule_id": "suspicious_heuristics",
+    "name": "Suspicious Heuristic Flags",
+    "description": "Files with multiple suspicious heuristic indicators",
+    "conditions": {
+      "heuristic_suspicious_count": {
+        "min": 2
+      },
+      "ai_score": {
+        "min": 0.3
+      }
+    },
+    "actions": [
+      {
+        "action_type": "sandbox",
+        "priority": 6,
+        "reason": "Multiple heuristic flags warrant further analysis",
+        "details": {
+          "timeout": 30
+        },
+        "auto_execute": false
+      }
+    ],
+    "enabled": true,
+    "priority": 6
+  }
+]
